@@ -7,7 +7,7 @@ import { DragEvent } from 'react'
 
 function PuzzleBoard() {
   const dispatch = useAppDispatch()
-  const { pieces, gridSize, draggedPiece, gameStatus } = useAppSelector(
+  const { pieces, gridSize, draggedPiece, gameStatus, image } = useAppSelector(
     (state) => state.puzzle
   )
 
@@ -42,24 +42,30 @@ function PuzzleBoard() {
           <h2>Congratulations! You solved the puzzle!</h2>
         </div>
       )}
-      <div
-        className="puzzle-board"
-        style={{
-          gridTemplateColumns: `repeat(${gridSize}, 1fr)`,
-          gridTemplateRows: `repeat(${gridSize}, 1fr)`,
-        }}
-      >
-        {pieces.map((piece, index) => (
-          <div
-            key={index}
-            className="puzzle-slot"
-            onDragOver={handleDragOver}
-            onDrop={(e) => handleDrop(e, index)}
-          >
-            <PuzzlePiece piece={piece} index={index} />
-          </div>
-        ))}
-      </div>
+      {gameStatus === 'completed' && image ? (
+        <div className="completed-image-container">
+          <img src={image} alt="Completed puzzle" className="completed-image" />
+        </div>
+      ) : (
+        <div
+          className="puzzle-board"
+          style={{
+            gridTemplateColumns: `repeat(${gridSize}, 1fr)`,
+            gridTemplateRows: `repeat(${gridSize}, 1fr)`,
+          }}
+        >
+          {pieces.map((piece, index) => (
+            <div
+              key={index}
+              className="puzzle-slot"
+              onDragOver={handleDragOver}
+              onDrop={(e) => handleDrop(e, index)}
+            >
+              <PuzzlePiece piece={piece} index={index} />
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   )
 }
